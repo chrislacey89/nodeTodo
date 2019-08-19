@@ -38,4 +38,25 @@ router.post('/', (req, res) => {
   res.json(todos);
 });
 
+// Update todo item
+router.put('/:id', (req, res) => {
+  const found = todos.some(todo => todo.id === parseInt(req.params.id));
+
+  if (found) {
+    const updateTodo = req.body;
+    todos.forEach(todo => {
+      if (todo.id === parseInt(req.params.id)) {
+        // if title or completed are updated and sent with request. If yes, we set to new title or completed
+        todo.title = updateTodo ? updateTodo.title : todo.title;
+        todo.completed = updateTodo ? updateTodo.completed : todo.completed;
+
+        res.json({ msg: 'Todo was update', todo: todo });
+      }
+    });
+  } else {
+    res
+      .status(400)
+      .json({ msg: `No todo item with the id of ${req.params.id}` });
+  }
+});
 module.exports = router;
