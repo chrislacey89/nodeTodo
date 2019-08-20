@@ -50,8 +50,24 @@ router.put('/:id', (req, res) => {
         todo.title = updateTodo ? updateTodo.title : todo.title;
         todo.completed = updateTodo ? updateTodo.completed : todo.completed;
 
-        res.json({ msg: 'Todo was update', todo: todo });
+        res.json({ msg: 'Todo was updated', todo: todo });
       }
+    });
+  } else {
+    res
+      .status(400)
+      .json({ msg: `No todo item with the id of ${req.params.id}` });
+  }
+});
+
+// Delete Member
+router.delete('/:id', (req, res) => {
+  const found = todos.some(todo => todo.id === parseInt(req.params.id));
+
+  if (found) {
+    res.json({
+      msg: 'Todo item deleted',
+      todos: todos.filter(todo => todo.id !== parseInt(req.params.id))
     });
   } else {
     res
