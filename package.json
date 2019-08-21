@@ -4,7 +4,7 @@
   "description": "Todo list backend",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon index"
+    "start": "nodemon app"
   },
   "author": "Chris Lacey",
   "license": "ISC",

@@ -11,7 +11,9 @@ exports.getSingleTodo = (req, res) => {
   const found = todos.some(todo => todo.id === parseInt(req.params.id));
 
   if (found) {
-    res.json(todos.filter(todo => todo.id === parseInt(req.params.id)));
+    res
+      .status(200)
+      .json(todos.filter(todo => todo.id === parseInt(req.params.id)));
   } else {
     res
       .status(400)
