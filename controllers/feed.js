@@ -25,7 +25,7 @@ exports.getSingleTodo = (req, res) => {
 exports.createTodo = (req, res) => {
   const newTodo = {
     userId: 1,
-    id: uuid.v4(),
+    _id: uuid.v4(),
     title: req.body.title,
     completed: false
   };

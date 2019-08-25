@@ -1,5 +1,7 @@
 const express = require('express');
 const path = require('path');
+const mongoose = require('mongoose');
+
 const logger = require('./Middleware/logger');
 const feedRoutes = require('./Routes/API/todos');
 
@@ -31,6 +33,15 @@ app.use((req, res, next) => {
 // API routs -Todos
 app.use('/api/todos', feedRoutes);
 
-const PORT = process.env.PORT || 5000;
+mongoose
+  .connect(
+    'mongodb+srv://chrislacey89:yHpJgY3pAm3WJWZS@todolist-unvzr.mongodb.net/test?retryWrites=true&w=majority'
+  )
+  .then(result => {
+    app.listen(5000);
+  })
+  .catch(err => {
+    console.log(err);
+  });
 
-app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
+//Password: yHpJgY3pAm3WJWZS
