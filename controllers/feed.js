@@ -1,4 +1,4 @@
-const todos = require('../todos');
+const TodoItem = require('../models/todoItems');
 const uuid = require('uuid');
 
 // Gets all todos
@@ -6,35 +6,34 @@ exports.getTodos = (req, res) => {
   res.json(todos);
 };
 
-// Get single todo
-exports.getSingleTodo = (req, res) => {
-  const found = todos.some(todo => todo.id === parseInt(req.params.id));
+// // Get single todo
+// exports.getSingleTodo = (req, res) => {
+//   const found = todos.some(todo => todo.id === parseInt(req.params.id));
 
-  if (found) {
-    res
-      .status(200)
-      .json(todos.filter(todo => todo.id === parseInt(req.params.id)));
-  } else {
-    res
-      .status(400)
-      .json({ msg: `No todo item with the id of ${req.params.id}` });
-  }
-};
+//   if (found) {
+//     res
+//       .status(200)
+//       .json(todos.filter(todo => todo.id === parseInt(req.params.id)));
+//   } else {
+//     res
+//       .status(400)
+//       .json({ msg: `No todo item with the id of ${req.params.id}` });
+//   }
+// };
 
 // Create todo
 exports.createTodo = (req, res) => {
-  const newTodo = {
-    userId: 1,
-    _id: uuid.v4(),
-    title: req.body.title,
-    completed: false
-  };
-  if (!newTodo.title) {
-    return res.status(400).json({ msg: 'Please add a todo before submitting' });
+  const title = req.body.title;
+  const completed = false;
+  const newTodoItem = new TodoItem({ title: title, completed: completed });
+  {
+    newTodoItem.save().then(result => {
+      console.log(`Created Item: ${result}`);
+    });
   }
 
-  todos.push(newTodo);
-  res.json(todos);
+  //   todos.push(newTodo);
+  //   res.json(todos);
 };
 
 // Update todo item

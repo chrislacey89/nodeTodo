@@ -18,7 +18,7 @@ app.use(express.urlencoded({ extended: false }));
 // Set static folder
 app.use(express.static(path.join(__dirname, 'Public')));
 
-//Todo: remove when deploying app
+// Todo: remove when deploying app
 //Set Cors Headers
 app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -35,7 +35,7 @@ app.use('/api/todos', feedRoutes);
 
 mongoose
   .connect(
-    'mongodb+srv://chrislacey89:yHpJgY3pAm3WJWZS@todolist-unvzr.mongodb.net/test?retryWrites=true&w=majority'
+    'mongodb+srv://chrislacey89:yHpJgY3pAm3WJWZS@todolist-unvzr.mongodb.net/todoList?retryWrites=true&w=majority'
   )
   .then(result => {
     app.listen(5000);

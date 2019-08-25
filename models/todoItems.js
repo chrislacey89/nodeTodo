@@ -12,3 +12,6 @@ const todoSchema = new Schema({
     required: true
   }
 });
+
+// A model connects a schema with a name
+module.exports = mongoose.model('TodoItem', todoSchema);
