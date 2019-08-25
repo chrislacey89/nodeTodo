@@ -4,7 +4,7 @@ const router = express.Router();
 const feedController = require('../../controllers/feed');
 
 // Gets all todos
-// router.get('/', feedController.getTodos);
+router.get('/', feedController.getTodos);
 
 // Get single todo
 // router.get('/:id', feedController.getSingleTodo);

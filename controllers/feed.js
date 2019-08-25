@@ -3,7 +3,9 @@ const uuid = require('uuid');
 
 // Gets all todos
 exports.getTodos = (req, res) => {
-  res.json(todos);
+  TodoItem.find().then(result => {
+    console.log(`Created Item: ${result}`);
+  });
 };
 
 // // Get single todo
