@@ -1,40 +1,32 @@
 const TodoItem = require('../models/todoItems');
 const uuid = require('uuid');
 
+//todo: fetching works. How to pass result to font end?
 // Gets all todos
 exports.getTodos = (req, res) => {
-  TodoItem.find().then(result => {
-    console.log(`Created Item: ${result}`);
-  });
+  TodoItem.find()
+    .then(todos => {
+      res
+        .status(200)
+        .json({ message: 'Feteched items successfully.', todos: todos });
+    })
+    .catch(err => console.log(err));
 };
-
-// // Get single todo
-// exports.getSingleTodo = (req, res) => {
-//   const found = todos.some(todo => todo.id === parseInt(req.params.id));
-
-//   if (found) {
-//     res
-//       .status(200)
-//       .json(todos.filter(todo => todo.id === parseInt(req.params.id)));
-//   } else {
-//     res
-//       .status(400)
-//       .json({ msg: `No todo item with the id of ${req.params.id}` });
-//   }
-// };
 
 // Create todo
 exports.createTodo = (req, res) => {
   const title = req.body.title;
   const completed = false;
   const newTodoItem = new TodoItem({ title: title, completed: completed });
-  {
-    newTodoItem.save().then(result => {
-      console.log(`Created Item: ${result}`);
-    });
-  }
+  res.status(200).json({
+    message: 'Item Created',
+    todo: newTodoItem
+  });
+  newTodoItem.save().then(result => {
+    console.log(`Created Item: ${result}`);
+  });
 
-  //   todos.push(newTodo);
+  // todos.push(newTodo);
   //   res.json(todos);
 };
 

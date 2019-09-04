@@ -7,17 +7,6 @@ const feedRoutes = require('./Routes/API/todos');
 
 const app = express();
 
-// Init middleware
-// app.use(logger);
-
-// Body Parser Middleware
-//par
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-
-// Set static folder
-app.use(express.static(path.join(__dirname, 'Public')));
-
 // Todo: remove when deploying app
 //Set Cors Headers
 app.use((req, res, next) => {
@@ -29,6 +18,17 @@ app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
   next();
 });
+
+// Init middleware
+// app.use(logger);
+
+// Body Parser Middleware
+//par
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+
+// Set static folder
+app.use(express.static(path.join(__dirname, 'Public')));
 
 // API routs -Todos
 app.use('/api/todos', feedRoutes);
