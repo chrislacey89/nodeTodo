@@ -1,16 +1,23 @@
 const TodoItem = require('../models/todoItems');
 const uuid = require('uuid');
 
+const { validationResult } = require('express-validator/check');
+
 //todo: fetching works. How to pass result to font end?
 // Gets all todos
-exports.getTodos = (req, res) => {
+exports.getTodos = (req, res, next) => {
   TodoItem.find()
     .then(todos => {
       res
         .status(200)
         .json({ message: 'Feteched items successfully.', todos: todos });
     })
-    .catch(err => console.log(err));
+    .catch(err => {
+      if (!err.statusCode) {
+        err.statusCode = 500;
+      }
+      next(err);
+    });
 };
 
 // Create todo
@@ -45,11 +52,13 @@ exports.updateTodo = (req, res) => {
         res.json({ msg: 'Todo was updated', todo: todo });
       }
     });
-  } else {
-    res
-      .status(400)
-      .json({ msg: `No todo item with the id of ${req.params.id}` });
   }
+};
+
+exports.updateId = (req, res, next) => {
+  const todoId = req.params.id;
+  const title = req.body.title;
+  const completed = req.body.completed;
 };
 
 // Delete Member
