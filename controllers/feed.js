@@ -20,6 +20,15 @@ exports.getTodos = (req, res, next) => {
     });
 };
 
+exports.updatelater = async (request, response) => {
+  try {
+    var todo = await TodoItem.findById(request.params.id).exec();
+    response.send(todo);
+  } catch (error) {
+    response.status(500).send(error);
+  }
+};
+
 // Create todo
 exports.createTodo = (req, res) => {
   const title = req.body.title;
