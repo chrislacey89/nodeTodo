@@ -5,12 +5,45 @@ const { validationResult } = require('express-validator/check');
 
 //todo: fetching works. How to pass result to font end?
 // Gets all todos
-exports.getTodos = (req, res, next) => {
-  TodoItem.find()
-    .then(todos => {
-      res
-        .status(200)
-        .json({ message: 'Feteched items successfully.', todos: todos });
+exports.getTodos = async (req, res, next) => {
+  try {
+    let todos = await TodoItem.find();
+    res
+      .status(200)
+      .json({ message: 'Feteched items successfully.', todos: todos });
+  } catch (err) {
+    if (!err.statusCode) {
+      err.statusCode = 500;
+    }
+    next(err);
+  }
+};
+
+// Create todo
+exports.createTodo = (req, res, next) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    const error = new Error('Validation failed, entered data is incorrect.');
+    error.statusCode = 422;
+    throw error;
+  }
+
+  const title = req.body.title;
+  const completed = false;
+  const newTodoItem = new TodoItem({ title: title, completed: completed });
+
+  res.status(201).json({
+    message: 'Item Created',
+    todo: newTodoItem
+  });
+  newTodoItem
+    .save()
+    .then(result => {
+      res.status(201).json({
+        message: 'Post created successfully!',
+        post: result
+      });
+      console.log(`Created Item: ${result}`);
     })
     .catch(err => {
       if (!err.statusCode) {
@@ -18,56 +51,45 @@ exports.getTodos = (req, res, next) => {
       }
       next(err);
     });
-};
-
-exports.updatelater = async (request, response) => {
-  try {
-    var todo = await TodoItem.findById(request.params.id).exec();
-    response.send(todo);
-  } catch (error) {
-    response.status(500).send(error);
-  }
-};
-
-// Create todo
-exports.createTodo = (req, res) => {
-  const title = req.body.title;
-  const completed = false;
-  const newTodoItem = new TodoItem({ title: title, completed: completed });
-  res.status(200).json({
-    message: 'Item Created',
-    todo: newTodoItem
-  });
-  newTodoItem.save().then(result => {
-    console.log(`Created Item: ${result}`);
-  });
 
   // todos.push(newTodo);
   //   res.json(todos);
 };
 
 // Update todo item
-exports.updateTodo = (req, res) => {
-  const found = todos.some(todo => todo.id === parseInt(req.params.id));
-
-  if (found) {
-    const updateTodo = req.body;
-    todos.forEach(todo => {
-      if (todo.id === parseInt(req.params.id)) {
-        // if title or completed are updated and sent with request. If yes, we set to new title or completed
-        todo.title = updateTodo ? updateTodo.title : todo.title;
-        todo.completed = updateTodo ? updateTodo.completed : todo.completed;
-
-        res.json({ msg: 'Todo was updated', todo: todo });
-      }
-    });
-  }
-};
-
-exports.updateId = (req, res, next) => {
+exports.updateTodo = (req, res, next) => {
   const todoId = req.params.id;
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    const error = new Error('Validation failed, entered data is incorrect.');
+    error.statusCode = 422;
+    throw error;
+  }
+
   const title = req.body.title;
   const completed = req.body.completed;
+
+  TodoItem.findById(todoId)
+    .then(todo => {
+      if (!todo) {
+        const error = new Error('Could not find post.');
+        error.statusCode = 404;
+        throw error;
+      }
+
+      todo.title = title;
+      todo.completed = completed;
+      return todo.save();
+    })
+    .then(result => {
+      res.status(200).json({ message: 'Todo item updated!', todos: result });
+    })
+    .catch(err => {
+      if (!err.statusCode) {
+        err.statusCode = 500;
+      }
+      next(err);
+    });
 };
 
 // Delete Member
