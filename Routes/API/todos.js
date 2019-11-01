@@ -7,7 +7,7 @@ const feedController = require('../../controllers/feed');
 router.get('/', feedController.getTodos);
 
 // Get single todo
-// router.get('/:id', feedController.getSingleTodo);
+router.get('/:id', feedController.getSingleTodo);
 
 // Create todo
 router.post('/', feedController.createTodo);
