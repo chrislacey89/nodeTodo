@@ -7,7 +7,7 @@ const feedController = require('../../controllers/feed');
 router.get('/', feedController.getTodos);
 
 // Get single todo
-router.get('/:id', feedController.getSingleTodo);
+// router.get('/:id', feedController.getSingleTodo);
 
 // Create todo
 router.post('/', feedController.createTodo);
@@ -19,3 +19,12 @@ router.put('/:id', feedController.updateTodo);
 router.delete('/:id', feedController.deleteTodo);
 
 module.exports = router;
+
+exports.deleteTodo = async (request, response) => {
+  try {
+    let result = await TodoItem.deleteOne({ _id: request.params.id }).exec();
+    response.send(result);
+  } catch (error) {
+    response.status(500).send(error);
+  }
+};
