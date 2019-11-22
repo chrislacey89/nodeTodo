@@ -1,5 +1,4 @@
 const TodoItem = require('../models/todoItems');
-const uuid = require('uuid');
 
 const { validationResult } = require('express-validator/check');
 
@@ -74,6 +73,7 @@ exports.deleteTodo = async (request, response) => {
   try {
     let result = await TodoItem.deleteOne({ _id: request.params.id }).exec();
     response.send(result);
+    console.log(request);
   } catch (error) {
     response.status(500).send(error);
   }

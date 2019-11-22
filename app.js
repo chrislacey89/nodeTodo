@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 
 const logger = require('./Middleware/logger');
 const feedRoutes = require('./Routes/API/todos');
+const authRoutes = require('./Routes/API/auth');
 
 const app = express();
 
@@ -31,6 +32,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'Public')));
 
 // API routs -Todos
+app.use('/api/todos', authRoutes);
 app.use('/api/todos', feedRoutes);
 
 mongoose
