@@ -35,6 +35,15 @@ app.use(express.static(path.join(__dirname, 'Public')));
 app.use('/api/todos', authRoutes);
 app.use('/api/todos', feedRoutes);
 
+app.use((error, req, res, next) => {
+  console.log(error);
+  const status = error.statusCode || 500;
+  const message = error.message;
+  const data = error.data;
+  //keep errors to pass to front end
+  res.status(status).json({ message: message, data: data });
+});
+
 mongoose
   .connect(
     'mongodb+srv://chrislacey89:yHpJgY3pAm3WJWZS@todolist-unvzr.mongodb.net/todoList?retryWrites=true&w=majority'
