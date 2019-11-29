@@ -11,10 +11,12 @@ exports.postLogin = (req, res, next) => {};
 exports.signup = (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
-    const error = new Error('Validation failed.');
-    error.statusCode = 422;
-    error.data = errors.array();
-    throw error;
+    let emailError = errors.array()[0].msg;
+    if (emailError === 'Please enter a valid email.') {
+      return res.status(422).json({ errors: errors.array() });
+    }
+
+    // return res.status(422).json({ errors: errors.array() });
   }
 
   const email = req.body.email;
