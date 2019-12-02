@@ -18,8 +18,6 @@ router.put('/:id', feedController.updateTodo);
 // Delete Member
 router.delete('/:id', feedController.deleteTodo);
 
-module.exports = router;
-
 exports.deleteTodo = async (request, response) => {
   try {
     let result = await TodoItem.deleteOne({ _id: request.params.id }).exec();
@@ -28,3 +26,4 @@ exports.deleteTodo = async (request, response) => {
     response.status(500).send(error);
   }
 };
+module.exports = router;

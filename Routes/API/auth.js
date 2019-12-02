@@ -33,13 +33,17 @@ router.post(
       .normalizeEmail(),
     body('password')
       .trim()
-      .isLength({ min: 5 }),
+      .isLength({ min: 5 })
+      .withMessage('Password less than 5 char.'),
     body('name')
       .trim()
       .not()
       .isEmpty()
+      .withMessage('Please enter a name.')
   ],
   authController.signup
 );
+
+router.post('/login', authController.login);
 
 module.exports = router;

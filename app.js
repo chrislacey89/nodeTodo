@@ -32,7 +32,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'Public')));
 
 // API routs -Todos
-app.use('/api/todos', authRoutes);
+app.use('/api/auth', authRoutes);
 app.use('/api/todos', feedRoutes);
 
 app.use((error, req, res, next) => {
