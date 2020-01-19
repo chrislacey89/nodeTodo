@@ -5,11 +5,18 @@ const { validationResult } = require('express-validator/check');
 //todo: fetching works. How to pass result to font end?
 // Gets all todos
 exports.getTodos = async (req, res, next) => {
+  // only return todos for creator id associated with them
+  console.log(res);
   try {
     let todos = await TodoItem.find();
+
+    const filteredResult = todos.filter(
+      x => x.creator.toString() === req.userId
+    );
+    console.log(filteredResult);
     res
       .status(200)
-      .json({ message: 'Feteched items successfully.', todos: todos });
+      .json({ message: 'Feteched items successfully.', todos: filteredResult });
   } catch (err) {
     if (!err.statusCode) {
       err.statusCode = 500;
