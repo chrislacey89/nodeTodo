@@ -95,9 +95,16 @@ exports.updateTodo = async (request, response) => {
 // Delete Member
 exports.deleteTodo = async (request, response) => {
   try {
+    let todo = await TodoItem.findById(request.params.id);
+
+    if (todo.creator.toString() !== request.userId) {
+      const error = new Error('Not authorized!');
+      error.statusCode = 403;
+      throw error;
+    }
+
     let result = await TodoItem.deleteOne({ _id: request.params.id }).exec();
     response.send(result);
-    console.log(request);
   } catch (error) {
     response.status(500).send(error);
   }
